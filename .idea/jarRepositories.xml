@@ -27,6 +27,11 @@
       <option name="url" value="https://oss.sonatype.org/content/groups/public/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="maven_central" />
+      <option name="name" value="Maven Central" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="io.papermc" />
       <option name="name" value="io.papermc" />
       <option name="url" value="https://repo.papermc.io/repository/maven-public/" />
@@ -70,6 +75,11 @@
       <option name="id" value="oraxen" />
       <option name="name" value="Oraxen Repository" />
       <option name="url" value="https://repo.oraxen.com/releases" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="papermc" />
+      <option name="name" value="papermc" />
+      <option name="url" value="https://repo.papermc.io/repository/maven-public/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jitpack-repo" />
