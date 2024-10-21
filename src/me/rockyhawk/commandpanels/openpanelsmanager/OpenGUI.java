@@ -3,6 +3,8 @@ package me.rockyhawk.commandpanels.openpanelsmanager;
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.api.Panel;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +30,7 @@ public class OpenGUI {
 
         Inventory i;
         if(position == PanelPosition.Top) {
-            String title = getTitle(p, pconfig, panel, position, animateValue);
+            Component title = getTitle(p, pconfig, panel, position, animateValue);
 
             if (isNumeric(pconfig.getString("rows"))) {
                 i = Bukkit.createInventory(p, Integer.parseInt(pconfig.getString("rows")) * 9, title);
@@ -164,13 +166,6 @@ public class OpenGUI {
             plugin.openPanels.skipPanelClose.remove(p.getName());
         } else if (openType == PanelOpenType.Refresh) {
             //openType Refresh will just refresh the panel
-            if(plugin.legacy.MAJOR_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_21) ||
-                    (plugin.legacy.MAJOR_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_20) && plugin.legacy.MINOR_VERSION >= 5)){
-                //Title refresh ability added in 1.20.5 api
-                if(position == PanelPosition.Top) {
-                    p.getOpenInventory().setTitle(getTitle(p, pconfig, panel, position, animateValue));
-                }
-            }
             if(position == PanelPosition.Top) {
                 plugin.legacy.setStorageContents(p, plugin.legacy.getStorageContents(i));
             }
@@ -221,23 +216,7 @@ public class OpenGUI {
         }
         return true;
     }
-
-    private String getTitle(Player p, ConfigurationSection pconfig, Panel panel, PanelPosition position, Integer animateValue){
-        String title;
-        if(pconfig.contains("custom-title")) {
-            //used for titles in the custom-title section, for has sections
-            String section = plugin.has.hasSection(panel,position,pconfig.getConfigurationSection("custom-title"), p);
-
-            //check for if there is animations inside the custom-title section
-            if (pconfig.contains("custom-title" + section + ".animate" + animateValue)) {
-                section = section + ".animate" + animateValue;
-            }
-
-            title = plugin.tex.placeholders(panel, position, p, pconfig.getString("custom-title" + section + ".title"));
-        }else {
-            //regular inventory title
-            title = plugin.tex.placeholders(panel, position, p, pconfig.getString("title"));
-        }
-        return title;
+    private Component getTitle(Player p, ConfigurationSection pconfig, Panel panel, PanelPosition position, Integer animateValue){
+        return MiniMessage.miniMessage().deserialize(plugin.tex.placeholders(panel,position,p,pconfig.getString("title")));
     }
 }
